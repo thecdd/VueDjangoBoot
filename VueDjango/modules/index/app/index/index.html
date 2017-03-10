@@ -1,0 +1,22 @@
+{% extends "base/app/base.html" %}
+{% load render_bundle from webpack_loader %}
+{% load staticfiles %}
+
+{% block title %}
+    App Scaffold
+{% endblock %}
+
+{% block extrahead %}
+{% render_bundle 'index' 'css' %}
+{% endblock %}
+
+{% block content %}
+{% verbatim %}
+<div id="app">
+<index></index>
+</div>
+{% endverbatim %}
+
+{% render_bundle 'index' 'js' %}
+
+{% endblock %}

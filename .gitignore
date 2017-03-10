@@ -1,3 +1,13 @@
+# project
+*/node_modules/*
+*/static/bundles
+db.sqlite3
+webpack-stats.json
+
+# default
+# IDE
+*/.idea/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
