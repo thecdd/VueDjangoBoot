@@ -9,7 +9,8 @@ from VueDjango.env import SITE_CONFIG
 def get_common_template_context(extra_context=None):
     base_context = {
         'BASE_URL_PATH': SITE_CONFIG.get('base_url'),
-        'STATIC_URL_PATH': SITE_CONFIG.get('static_url')
+        'STATIC_URL_PATH': SITE_CONFIG.get('static_url'),
+        'CSRFTOKEN_NAME': SITE_CONFIG.get('csrftoken_name')
     }
     if extra_context is not None:
         base_context.update(extra_context)

@@ -1,6 +1,7 @@
 # project
 */node_modules/*
 */static/bundles
+*.log
 db.sqlite3
 webpack-stats.json
 

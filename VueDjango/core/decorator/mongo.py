@@ -1,4 +1,5 @@
 import datetime
+import threading
 from mongoengine import signals
 
 
@@ -20,3 +21,7 @@ def update_system_info(sender, document):
         document.updateTime = datetime.datetime.utcnow()
     if hasattr(document, 'version'):
         document.version += 1
+        if hasattr(document, 'createTime') and document.version == 1:
+            document.createTime = datetime.datetime.utcnow()
+    if hasattr(document, 'createBy'):
+        document.createBy = threading.current_thread().getName()

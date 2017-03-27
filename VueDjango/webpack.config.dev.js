@@ -20,17 +20,17 @@ module.exports = {
             },
             {
                 test: /\.js$/,
-                loader: "babel",
+                loader: 'babel?presets[]=es2015',
                 exclude: /node_modules/
             },
             {
                 test: /\.json$/,
                 loader: 'json'
-              },
-              {
-        test: /\.html$/,
-        loader: 'vue-html'
-      },
+            },
+            {
+                test: /\.html$/,
+                loader: 'vue-html'
+            },
             {
                 test:/\.css$/,
                 loader: "style!css"

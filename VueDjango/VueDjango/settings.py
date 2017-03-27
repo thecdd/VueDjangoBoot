@@ -13,21 +13,13 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 import os
 from . import env
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = env.PROJECT_BASE_DIR
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'w$rx@%b_0^&+q)84_e6vwz-0yqpd7cnx!-=pyhq9ix^$)mo(cj'
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.IS_DEV
 
 ALLOWED_HOSTS = ['*']
-
-# Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -45,7 +37,7 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    # 'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -71,9 +63,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'VueDjango.wsgi.application'
-
-# Database
-# https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
 DATABASES = {
     'default': {
@@ -113,9 +102,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.9/howto/static-files/
-
 STATIC_URL = env.SITE_CONFIG.get('static_url')
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
@@ -146,4 +132,85 @@ WEBPACK_LOADER = {
 MONGOENGINE_SESSION_COLLECTION = 'fm_user_session'
 SESSION_ENGINE = 'mongoengine.django.sessions'
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-SESSION_COOKIE_AGE = int(os.getenv('DSH_LOG_DEFAULT_LOG_NAME', str(24 * 60 * 60)))
+SESSION_COOKIE_AGE = env.SITE_CONFIG.get('session_time')
+SESSION_COOKIE_NAME = env.SITE_CONFIG.get('session_name')
+CSRF_COOKIE_NAME = env.SITE_CONFIG.get('csrftoken_name')
+
+# LOG
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+    'formatters': {
+        'standard': {
+            'format': '%(asctime)s [%(threadName)s:%(thread)d] [%(name)s:%(lineno)d] [%(levelname)s]- %(message)s'
+        },
+    },
+    'filters': {
+    },
+    'handlers': {
+        'console': {
+            'level': env.SITE_CONFIG.get('log_level'),
+            'class': 'logging.StreamHandler',
+            'formatter': 'standard'
+        },
+        'default': {
+            'level': env.SITE_CONFIG.get('log_level'),
+            'class': 'core.tool.logers.TimedCompressedRotatingFileHandler',
+            'filename': os.path.join(env.SITE_CONFIG.get('log_path'), 'all.log'),
+            'formatter': 'standard',
+            'when': 'D',
+            'interval': 1,
+        },
+        'exception_handler': {
+            'level': env.SITE_CONFIG.get('log_level'),
+            'class': 'core.tool.logers.TimedCompressedRotatingFileHandler',
+            'filename': os.path.join(env.SITE_CONFIG.get('log_path'), 'exception.log'),
+            'formatter': 'standard',
+            'when': 'D',
+            'interval': 1,
+        },
+        'request_handler': {
+            'level': env.SITE_CONFIG.get('log_level'),
+            'class': 'core.tool.logers.TimedCompressedRotatingFileHandler',
+            'filename': os.path.join(env.SITE_CONFIG.get('log_path'), 'request.log'),
+            'formatter': 'standard',
+            'when': 'D',
+            'interval': 1,
+        },
+        'scripts_handler': {
+            'level': env.SITE_CONFIG.get('log_level'),
+            'class': 'core.tool.logers.TimedCompressedRotatingFileHandler',
+            'filename': os.path.join(env.SITE_CONFIG.get('log_path'), 'script.log'),
+            'formatter': 'standard',
+            'when': 'D',
+            'interval': 1,
+        },
+    },
+    'loggers': {
+        'core': {
+            'handlers': ['default', 'console'],
+            'level': env.SITE_CONFIG.get('log_level'),
+            'propagate': True
+        },
+        'django': {
+            'handlers': ['default', 'console'],
+            'level': env.SITE_CONFIG.get('log_level'),
+            'propagate': False
+        },
+        'django.request': {
+            'handlers': ['request_handler'],
+            'level': env.SITE_CONFIG.get('log_level'),
+            'propagate': False
+        },
+        'exception': {
+            'handlers': (['console', 'exception_handler'] if DEBUG else ['exception_handler']),
+            'level': env.SITE_CONFIG.get('log_level'),
+            'propagate': False
+        },
+        'scripts': {
+            'handlers': ['scripts_handler'],
+            'level': env.SITE_CONFIG.get('log_level'),
+            'propagate': False
+        },
+    }
+}

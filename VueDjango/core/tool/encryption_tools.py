@@ -11,7 +11,7 @@ def make_random_salt(salt_len=10):
     return salt
 
 
-def encryp_psw(pw=None, salt=None):
+def encrypt_psw(pw=None, salt=None):
     if salt is None:
         salt = make_random_salt()
     if pw is None:

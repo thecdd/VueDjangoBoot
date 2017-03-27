@@ -1,7 +1,7 @@
-var Vue = require('vue')
-var index = require('./index.vue')
+import base from '../../../base/app/base.js'
+import index from './index.vue'
 
-new Vue({
+new base.Vue({
   el: '#app',
   components: { index }
 })

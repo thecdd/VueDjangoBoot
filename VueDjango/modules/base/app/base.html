@@ -13,7 +13,8 @@
     <script type="text/javascript">
         window.globalConfig={
             'root':'{{ BASE_URL_PATH }}',
-            'staticRoot':'{{ STATIC_URL_PATH }}'
+            'staticRoot':'{{ STATIC_URL_PATH }}',
+            'csrftokenName': '{{CSRFTOKEN_NAME}}'
         }
         if(Object && Object.freeze){
             Object.freeze(globalConfig);
